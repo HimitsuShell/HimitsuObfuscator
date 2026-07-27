@@ -1,0 +1,6 @@
+#!/bin/sh
+
+TARGET=x86_64-unknown-linux-musl
+BINDIR=$(dirname "$0")
+
+exec "${BINDIR}/clang" --target=${TARGET} --sysroot=${BINDIR}/../${TARGET}/sysroot  "$@"
