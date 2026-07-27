@@ -19,6 +19,7 @@ A lightweight LLVM-17 obfuscator for any Linux.
 ## Usage
 ```shell
 git clone git@github.com:HimitsuShell/HimitsuObfuscator.git
+chmod 755 -R ./HimitsuObfuscator
 cd ./HimitsuObfuscator
 
 sudo apt-get install -y build-essential
