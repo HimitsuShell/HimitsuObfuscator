@@ -64,7 +64,7 @@ curl -LO https://github.com/HimitsuShell/Himitsu/releases/download/v1.2.0/himits
 
 docker load -i himitsu_core_v1.2.0.tar.gz                  # Load docker image
 docker run --name himitsu_core -d -it himitsu_core:v1.2.0  # Run container
-docker cp himitsu_core:/var/work/compiler/. .              # Copy comiler
+sudo docker cp himitsu_core:/var/work/compiler/. .              # Copy comiler
 rm -rf himitsu_core_v1.2.0.tar.gz
 
 sudo apt install git-lfs -y
