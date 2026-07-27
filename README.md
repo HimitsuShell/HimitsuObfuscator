@@ -18,6 +18,9 @@ A lightweight LLVM-17 obfuscator for any Linux.
 
 ## Usage
 ```shell
+git clone git@github.com:HimitsuShell/HimitsuObfuscator.git
+cd ./HimitsuObfuscator
+
 sudo apt-get install -y build-essential
 
 # builds a binary that runs on any linux (static musl)
@@ -67,6 +70,7 @@ sudo apt install git-lfs -y
 git lfs track "./bin/clang-17"
 git add .
 git commit -m "update v1.2.0"
+git push origin main
 ```
 
 ## Discussions
