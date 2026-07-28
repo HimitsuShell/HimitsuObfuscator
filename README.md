@@ -18,15 +18,20 @@ A lightweight LLVM-17 obfuscator for any Linux.
 
 ## Usage
 ```shell
-git clone git@github.com:HimitsuShell/HimitsuObfuscator.git
-chmod 755 -R ./HimitsuObfuscator
-cd ./HimitsuObfuscator
+tar -xvf himitsu_obfuscator_v1.2.0_0.tar
 
-sudo apt-get install -y build-essential
+vim main.c
+-----------------------------
+#include <stdio.h>
+int main() {
+  printf("Hello World!\n");
+  return 0;
+}
+-----------------------------
 
 # builds a binary that runs on any linux (static musl)
-./bin/x86_64-unknown-linux-musl-clang -flto -fuse-ld=lld -mllvm -sobf -mllvm -sub -static main.c -o main
-
+sudo apt-get install -y build-essential
+./compiler/bin/x86_64-unknown-linux-musl-clang -flto -fuse-ld=lld -mllvm -sobf -mllvm -sub -static main.c -o main
 ./main
 ```
 
@@ -59,19 +64,29 @@ sudo apt-get install -y build-essential
 
 ## Maintenance (Requires Ubuntu)
 ```shell
-# Download HimitsuShell Docker image
 curl -LO https://github.com/HimitsuShell/Himitsu/releases/download/v1.2.0/himitsu_core_v1.2.0.tar.gz
 
 docker load -i himitsu_core_v1.2.0.tar.gz                  # Load docker image
 docker run --name himitsu_core -d -it himitsu_core:v1.2.0  # Run container
 sudo docker cp himitsu_core:/var/work/compiler/. .         # Copy comiler
+sudo chown -R $USER:$USER .                                # Remove root permission
 rm -rf himitsu_core_v1.2.0.tar.gz
 
-sudo apt install git-lfs -y
-git lfs track "./bin/clang-17" # git lfs track
+rm -rf checksums.txt
+find . -not -path './.git/*' -type f -exec file {} + | grep -E 'ELF|ar archive' | cut -d: -f1 | sed 's|^\./||' > .gitignore
+git ls-files -c -o -i --exclude-standard | while read -r f; do
+  sha256sum "$f" >> checksums.txt
+  sudo rm -rf "$f"
+done
+
 git add .
 git commit -m "commit message"
-git push origin main
+git push origin dev
+
+# github release
+sudo docker cp himitsu_core:/var/work/compiler .
+sudo chown -R $USER:$USER .
+tar -cvf himitsu_obfuscator_v1.2.0_0.tar ./compiler
 ```
 
 ## Discussions
