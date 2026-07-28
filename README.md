@@ -18,14 +18,20 @@ A lightweight LLVM-17 obfuscator for any Linux.
 
 ## Usage
 ```shell
-git clone git@github.com:HimitsuShell/HimitsuObfuscator.git
-cd ./HimitsuObfuscator
+tar -xvf himitsu_obfuscator_v1.2.0_0.tar
 
-sudo apt-get install -y build-essential
+vim main.c
+-----------------------------
+#include <stdio.h>
+int main() {
+  printf("Hello World!\n");
+  return 0;
+}
+-----------------------------
 
 # builds a binary that runs on any linux (static musl)
-./bin/x86_64-unknown-linux-musl-clang -flto -fuse-ld=lld -mllvm -sobf -mllvm -sub -static main.c -o main
-
+sudo apt-get install -y build-essential
+./compiler/bin/x86_64-unknown-linux-musl-clang -flto -fuse-ld=lld -mllvm -sobf -mllvm -sub -static main.c -o main
 ./main
 ```
 
@@ -60,10 +66,10 @@ sudo apt-get install -y build-essential
 ```shell
 curl -LO https://github.com/HimitsuShell/Himitsu/releases/download/v1.2.0/himitsu_core_v1.2.0.tar.gz
 
-docker load -i himitsu_core_v1.2.0.tar.gz                          # Load docker image
+docker load -i himitsu_core_v1.2.0.tar.gz                  # Load docker image
 docker run --name himitsu_core -d -it himitsu_core:v1.2.0  # Run container
-sudo docker cp himitsu_core:/var/work/compiler/. .           # Copy comiler
-sudo chown -R $USER:$USER .                                       # Remove root permission
+sudo docker cp himitsu_core:/var/work/compiler/. .         # Copy comiler
+sudo chown -R $USER:$USER .                                # Remove root permission
 rm -rf himitsu_core_v1.2.0.tar.gz
 
 rm -rf checksums.txt
