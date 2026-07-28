@@ -18,6 +18,7 @@ A lightweight LLVM-17 obfuscator for any Linux.
 
 ## Usage
 ```shell
+# download and extract obfuscator
 curl -LO https://github.com/HimitsuShell/HimitsuObfuscator/releases/download/v1.2.0_0/himitsu_obfuscator_v1.2.0_0.tar
 tar -xvf himitsu_obfuscator_v1.2.0_0.tar
 
