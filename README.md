@@ -37,7 +37,7 @@ sudo apt-get install -y build-essential
 ./main
 ```
 
-### Obfuscation Options
+#### Obfuscation Options
 ```shell
 - bcf         # Bogus Control Flow (Warning: Significantly increases build time and binary size.)
   - bcf_prob  # Probability (1–100, default: 70)
@@ -52,13 +52,13 @@ sudo apt-get install -y build-essential
 - igv         # Indirect Global Variable
 ```
 
-### System Requirements
+#### System Requirements
 - **OS:** Ubuntu 24.04
 - **CPU:** x86_64 (Intel/AMD), 2.5 GHz or higher *(6 cores / 12 threads recommended)*
 - **Memory:** 16 GB RAM
 - **Storage:** 10 GB available space (SSD/NVMe)
 
-### Supported Platforms
+#### Supported Platforms
 - **Linux x86_64 (static musl)**
 - Linux ARM64 (Coming Soon)
 - Linux ARMv7 (Planned)
