@@ -10,18 +10,19 @@
   </a>
 </p>
 
-## HimitsuObfuscator
-A lightweight LLVM-17 obfuscator for any Linux.
+# HimitsuObfuscator
+a lightweight, stable, gpl-free llvm-17 obfuscator for linux.
 
 <img src="https://raw.githubusercontent.com/HimitsuShell/Himitsu/refs/heads/main/assets/features_obfuscation.png" width="200"><br>
 <sub><b>Block Flow Graph (Ghidra)</b></sub>
 
 ## Usage
 ```shell
-# download and extract obfuscator
-curl -LO https://github.com/HimitsuShell/HimitsuObfuscator/releases/download/v1.2.0_0/himitsu_obfuscator_v1.2.0_0.tar
-tar -xvf himitsu_obfuscator_v1.2.0_0.tar
+# download obfuscator
+curl -LO https://github.com/HimitsuShell/HimitsuObfuscator/releases/download/v2.1.0/himitsu_obfuscator.tar
+tar -xvf himitsu_obfuscator.tar
 
+# create sample source
 vim main.c
 -----------------------------
 #include <stdio.h>
@@ -31,69 +32,44 @@ int main() {
 }
 -----------------------------
 
-# builds a binary that runs on any linux (static musl)
-sudo apt-get install -y build-essential
-./compiler/bin/x86_64-unknown-linux-musl-clang -flto -fuse-ld=lld -mllvm -sobf -mllvm -sub -static main.c -o main
+# build and run (x86_64-linux-gnu)
+apt install -y build-essential
+./bin/clang --target=x86_64-linux-gnu -mllvm -sobf main.c -o main 
 ./main
+
+# supported targets: x86_64-linux-musl, aarch64-linux-gnu, aarch64-linux-musl, etc.
 ```
 
 #### Obfuscation Options
 ```shell
-- bcf         # Bogus Control Flow (Warning: Significantly increases build time and binary size.)
-  - bcf_prob  # Probability (1–100, default: 70)
-  - bcf_loop  # Number of Iterations (default: 2)
-- sub         # Instruction Substitution (add/and/sub/or/xor)
-  - sub_loop  # Number of Iterations (default: 1)
-- sobf        # String Encryption
-- split       # Basic Block Splitting
-  - split_num # Number of Splits (default: 3)
-- ibr         # Indirect Branches
-- icall       # Indirect Calls
-- igv         # Indirect Global Variable
+- fla         # control flow flattening
+- bcf         # bogus control flow (slow build, larger binary)
+  - bcf_prob  # probability (1–100, default: 30)
+  - bcf_loop  # number of iterations (default: 1)
+- sub         # instruction substitution (add/and/sub/or/xor)
+  - sub_loop  # number of iterations (default: 1)
+- sobf        # string encryption
+- split       # basic block splitting
+  - split_num # number of splits (default: 2)
+
+# selective obfuscation ('no' prefix disables)
+void test1() __attribute__((annotate("sobf"), annotate("nobcf")));
+void test1() { printf("Hello World!"); }
+
+# planned options: indirect branches, indirect calls, indirect global variable
 ```
 
-#### System Requirements
-- **OS:** Ubuntu 24.04
-- **CPU:** x86_64 (Intel/AMD), 2.5 GHz or higher *(6 cores / 12 threads recommended)*
-- **Memory:** 16 GB RAM
-- **Storage:** 10 GB available space (SSD/NVMe)
+#### Specifications
+- **llvm:** 17.0.6
+- **languages:** c, c++ (or llvm ir)
+- **platforms:** linux (x86_64, aarch64) | **planned:** armv7, riscv64, win11
+- **requirements:** ubuntu 24.04, x86_64 cpu (6c/12t rec.), 16gb ram, 10gb ssd
+- **bcf option:** do not compile with `-g` when using `-bcf` (debug info skips obfuscation).
 
-#### Supported Platforms
-- **Linux x86_64 (static musl)**
-- Linux ARM64 (Coming Soon)
-- Linux ARMv7 (Planned)
-- Linux RISC-V 64 (Planned)
-
-## Maintenance (Requires Ubuntu)
-```shell
-curl -LO https://github.com/HimitsuShell/Himitsu/releases/download/v1.2.0/himitsu_core_v1.2.0.tar.gz
-
-docker load -i himitsu_core_v1.2.0.tar.gz                  # Load docker image
-docker run --name himitsu_core -d -it himitsu_core:v1.2.0  # Run container
-sudo docker cp himitsu_core:/var/work/compiler/. .         # Copy comiler
-sudo chown -R $USER:$USER .                                # Remove root permission
-rm -rf himitsu_core_v1.2.0.tar.gz
-
-rm -rf checksums.txt
-find . -not -path './.git/*' -type f -exec file {} + | grep -E 'ELF|ar archive' | cut -d: -f1 | sed 's|^\./||' > .gitignore
-git ls-files -c -o -i --exclude-standard | while read -r f; do
-  sha256sum "$f" >> checksums.txt
-  sudo rm -rf "$f"
-done
-
-git add .
-git commit -m "commit message"
-git push origin dev
-
-# github release
-sudo docker cp himitsu_core:/var/work/compiler .
-sudo chown -R $USER:$USER .
-tar -cvf himitsu_obfuscator_v1.2.0_0.tar ./compiler
-```
-
-## Discussions
-Questions, bug reports, feature requests, and general discussions are welcome.  
-You can also contact us at hjyun@mushsw.com.
-
-## License
-[MIT License](https://github.com/HimitsuShell/HimitsuObfuscator/blob/main/LICENSE)
+## Info
+- **discussions:** open a github issue/discussion or email hjyun@mushsw.com
+- **sponsors:** Supported by the [Pyeongtaek Industrial Promotion Agency](https://pipabiz.or.kr/web/main/index.do) (South Korea), a government-affiliated public institution.
+- **license:**
+  - [MIT License](https://github.com/HimitsuShell/HimitsuObfuscator/blob/main/LICENSE)
+  - all copyleft (gpl/agpl) removed. fully commercial-safe.
+  - `[HimitsuShell CE]` notice applies to HimitsuShell only, not HimitsuObfuscator.
